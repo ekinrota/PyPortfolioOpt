@@ -332,9 +332,10 @@ class EfficientFrontier(base_optimizer.BaseConvexOptimizer):
             try:
                 global_min_volatility = np.sqrt(1 / np.sum(np.linalg.inv(self.cov_matrix)))
                 break
-            except LinAlgError:
-                global_min_volatility = np.sqrt(1 / np.sum(np.linalg.pinv(self.cov_matrix)))
-                break
+            except np.linalg.LinAlgError as err:
+                if 'Singular matrix' in str(err):
+                    global_min_volatility = np.sqrt(1 / np.sum(np.linalg.pinv(self.cov_matrix)))
+                    break
 
         if target_volatility < global_min_volatility:
             raise ValueError(
