@@ -334,6 +334,7 @@ class EfficientFrontier(base_optimizer.BaseConvexOptimizer):
                 break
             except LinAlgError:
                 global_min_volatility = np.sqrt(1 / np.sum(np.linalg.pinv(self.cov_matrix)))
+                break
 
         if target_volatility < global_min_volatility:
             raise ValueError(
